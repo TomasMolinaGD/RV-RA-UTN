@@ -1,0 +1,230 @@
+fileFormatVersion: 2
+guid: fec65230f7d09f0459a19d4d30f618ad
+ModelImporter:
+  serializedVersion: 24200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: C2
+    second: {fileID: 2100000, guid: fdb84b8d15c03f54cb7402d10494244d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ford_MustangShelbyGT500RewardRecycled_2019CalliperGloss_Material
+    second: {fileID: 2100000, guid: cbf89e6fcf10eed4598d1caeb4d54e3b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: c_CalliperBadge Front LSG1
+    second: {fileID: 2100000, guid: 494d2c8f904223448a133d9049e823ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: c_CalliperBody Front LSG1
+    second: {fileID: 2100000, guid: cf7002e365b3f3449bb590d2104ad2b1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019BadgeA_Material1
+    second: {fileID: 2100000, guid: 0226371e05438184082f60d7a2a74d13, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Base_Material1
+    second: {fileID: 2100000, guid: f3eafd81be7a9294cbc6cbd5443fba48, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Carbon1M_Material1
+    second: {fileID: 2100000, guid: 7a3d7542b916e744ba8f4fd117c80196, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Carbon1_Material1
+    second: {fileID: 2100000, guid: 5e537025f701ffe42917524d6bc76df8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Coloured_Material1
+    second: {fileID: 2100000, guid: bd393ff523b5cfe489bf48b2aabcc2a8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019EngineA_Material1
+    second: {fileID: 2100000, guid: 54d49e027b23e1841aeed78ee5721038, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille1A_Material1
+    second: {fileID: 2100000, guid: 26fb2550bd0311e4fa1ca23e9b77ad63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille2A_Material1
+    second: {fileID: 2100000, guid: 4767616096463ed419727f4b3e2a5160, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille3A_Material1
+    second: {fileID: 2100000, guid: bb154e7c248d48d4e9a6761259ab6e25, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille4A_Material1
+    second: {fileID: 2100000, guid: 3afabf41934433f40b6e23f477627a04, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille5A_Material1
+    second: {fileID: 2100000, guid: 59bd7449d2cab7449b26b5e2d0e1f41d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Grille6A_Material1
+    second: {fileID: 2100000, guid: b52c4d3bc9330294693500bf9665b9ae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019InteriorA_Material1
+    second: {fileID: 2100000, guid: 4a5de1ac783810c4986f66f0fe168142, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019LightA_Material1
+    second: {fileID: 2100000, guid: 108577679effe2b49b40ba3781ea03c3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019ManufacturerP_1dce741
+    second: {fileID: 2100000, guid: c0b177965fcc0dc4e9ebff0508f17f81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Paint_Material1
+    second: {fileID: 2100000, guid: ee01cdc0958666d48af2b0d1f1e09755, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019Window_Material1
+    second: {fileID: 2100000, guid: 432c27301502a544da225ac041445395, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: f_Ford_MustangShelbyGT500RewardRecycled_2019_Wheel1A_3D_3_d9d615f1
+    second: {fileID: 2100000, guid: e9e5b1c52334d2c46bd0e8afd5f0768f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: orange_glass
+    second: {fileID: 2100000, guid: 17fccf1176f8e0c4eb6363032013c474, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: red_glass
+    second: {fileID: 2100000, guid: 45b66f21c7433e74ab3cdd1f0a324212, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

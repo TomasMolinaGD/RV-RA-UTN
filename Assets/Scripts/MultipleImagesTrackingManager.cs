@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -21,6 +20,9 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     [Header("Configuración de Marcas")]
     [SerializeField] private List<BrandGroup> brandGroups = new List<BrandGroup>();
 
+    [Header("Presentación de modelos")]
+    [SerializeField, Min(0.05f)] private float targetCarLengthMeters = 0.25f;
+
     private ARTrackedImageManager _trackedImageManager;
 
     private Dictionary<string, BrandGroup> _logoToBrandMap = new Dictionary<string, BrandGroup>();
@@ -31,10 +33,6 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     private void Awake()
     {
         _trackedImageManager = GetComponent<ARTrackedImageManager>();
-    }
-
-    private void Start()
-    {
         SetupSceneElements();
     }
 
@@ -48,14 +46,21 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     {
         if (_trackedImageManager != null)
             _trackedImageManager.trackablesChanged.RemoveListener(OnImagesTrackedChanged);
+
+        HideAllCars();
     }
 
     private void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
+        bool switchRequested = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+
+#if UNITY_EDITOR
+        // Permite probar el cambio de modelo con clic izquierdo en XR Simulation.
+        switchRequested |= Input.GetMouseButtonDown(0);
+#endif
+
+        if (switchRequested)
             SwitchCarModelForActiveBrands();
-        }
     }
 
     private void SetupSceneElements()
@@ -76,6 +81,7 @@ public class MultipleImagesTrackingManager : MonoBehaviour
                 if (prefab == null) continue;
 
                 GameObject carInstance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                NormalizeCarScale(carInstance);
                 carInstance.SetActive(false);
                 spawnedCarsForThisBrand.Add(carInstance);
             }
@@ -94,6 +100,34 @@ public class MultipleImagesTrackingManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void NormalizeCarScale(GameObject carInstance)
+    {
+        Renderer[] renderers = carInstance.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length == 0)
+        {
+            Debug.LogWarning($"[AR ESCALA] '{carInstance.name}' no contiene renderers para calcular su tamaño.");
+            return;
+        }
+
+        Bounds combinedBounds = renderers[0].bounds;
+        for (int index = 1; index < renderers.Length; index++)
+            combinedBounds.Encapsulate(renderers[index].bounds);
+
+        float longestSide = Mathf.Max(
+            combinedBounds.size.x,
+            combinedBounds.size.y,
+            combinedBounds.size.z);
+
+        if (longestSide <= Mathf.Epsilon)
+        {
+            Debug.LogWarning($"[AR ESCALA] No se pudo calcular el tamaño de '{carInstance.name}'.");
+            return;
+        }
+
+        float scaleFactor = targetCarLengthMeters / longestSide;
+        carInstance.transform.localScale *= scaleFactor;
     }
 
     private void OnImagesTrackedChanged(ARTrackablesChangedEventArgs<ARTrackedImage> eventArgs)
@@ -116,27 +150,24 @@ public class MultipleImagesTrackingManager : MonoBehaviour
         
         string logoName = trackedImage.referenceImage.name;
 
-        if (!_logoToBrandMap.ContainsKey(logoName))
+        if (!_logoToBrandMap.TryGetValue(logoName, out BrandGroup brand))
         {
             Debug.LogWarning($"[AR DETECCIÓN] Se escaneó '{logoName}' pero no está registrado en el Inspector.");
             return;
         }
 
-        BrandGroup brand = _logoToBrandMap[logoName];
-        List<GameObject> brandCars = _spawnedBrandCars[brand.brandName];
+        if (!_spawnedBrandCars.TryGetValue(brand.brandName, out List<GameObject> brandCars))
+            return;
 
         if (brandCars == null || brandCars.Count == 0) return;
 
         // Si la cámara detecta la imagen claramente
         if (trackedImage.trackingState == TrackingState.Tracking)
         {
-            // Si la marca no tiene contenedor en la escena, se posiciona en la ubicación de la imagen
+            // Si la marca no tiene contenedor en la escena, se crea uno para agrupar sus modelos.
             if (!_brandWorldContainers.ContainsKey(brand.brandName))
             {
                 GameObject container = new GameObject($"Anchor_{brand.brandName}");
-                container.transform.position = trackedImage.transform.position;
-                container.transform.rotation = trackedImage.transform.rotation;
-
                 _brandWorldContainers.Add(brand.brandName, container.transform);
 
                 foreach (var car in brandCars)
@@ -149,6 +180,12 @@ public class MultipleImagesTrackingManager : MonoBehaviour
                 Debug.Log($"[AR DETECCIÓN] Autos de {brand.brandName} anclados en la posición escaneada.");
             }
 
+            // El contenido debe acompañar al marcador mientras AR Foundation actualiza su pose.
+            Transform brandContainer = _brandWorldContainers[brand.brandName];
+            brandContainer.SetPositionAndRotation(
+                trackedImage.transform.position,
+                trackedImage.transform.rotation);
+
             // Muestra el modelo activo
             int selectedIndex = _activeCarIndexPerBrand[brand.brandName];
             for (int i = 0; i < brandCars.Count; i++)
@@ -156,6 +193,28 @@ public class MultipleImagesTrackingManager : MonoBehaviour
                 brandCars[i].SetActive(i == selectedIndex);
             }
         }
+        else
+        {
+            SetBrandCarsActive(brand.brandName, false);
+        }
+    }
+
+    private void SetBrandCarsActive(string brandName, bool isActive)
+    {
+        if (!_spawnedBrandCars.TryGetValue(brandName, out List<GameObject> brandCars))
+            return;
+
+        foreach (var car in brandCars)
+        {
+            if (car != null)
+                car.SetActive(isActive);
+        }
+    }
+
+    private void HideAllCars()
+    {
+        foreach (string brandName in _spawnedBrandCars.Keys)
+            SetBrandCarsActive(brandName, false);
     }
 
     private void SwitchCarModelForActiveBrands()

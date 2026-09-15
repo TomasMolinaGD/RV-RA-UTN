@@ -213,17 +213,17 @@ MonoBehaviour:
     - {fileID: 7899695697391770184, guid: fa35b4a8e7e2b7e42a0c8b1e3b20bb9e, type: 3}
   - brandName: Ford
     logoNames:
-    - LogoF1
-    - LogoF2
-    - LogoF3
+    - FLogo1
+    - FLogo2
+    - FLogo3
     carPrefabs:
     - {fileID: 4736021190876737314, guid: 3c247b8baab7a1d4c902a4d8922349cd, type: 3}
     - {fileID: 5951226869308161614, guid: 849a4a4517f7c404aa113529eca0add4, type: 3}
     - {fileID: 3732330149156937682, guid: 50723680e87f204459a714203cb37474, type: 3}
   - brandName: Audi
     logoNames:
-    - LogoAudi1
-    - LogoAudi2
+    - ALogo1
+    - ALogo2
     carPrefabs:
     - {fileID: 2823936293298710066, guid: 45d29b97e8f4a0147b79812b24b89042, type: 3}
     - {fileID: 3926845805989786302, guid: bb96c22d95e166b45849a8b44c57de8b, type: 3}

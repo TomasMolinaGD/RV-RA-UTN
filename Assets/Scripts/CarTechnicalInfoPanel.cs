@@ -52,10 +52,12 @@ public class CarTechnicalInfoPanel : MonoBehaviour
         };
 
     private GameObject _panel;
+    private Canvas _canvas;
     private Image _accent;
     private Text _title;
     private Text _subtitle;
     private Text _details;
+    private bool _showroomMode;
 
     private void Awake()
     {
@@ -76,7 +78,7 @@ public class CarTechnicalInfoPanel : MonoBehaviour
         {
             _title.text = $"{brandName} {prefabName}";
             _subtitle.text = "Ficha técnica";
-            _details.text = "Datos técnicos no disponibles\nTocá la pantalla para cambiar de modelo";
+            _details.text = $"Datos técnicos no disponibles\n{GetInteractionHint()}";
         }
         else
         {
@@ -85,11 +87,18 @@ public class CarTechnicalInfoPanel : MonoBehaviour
             _details.text =
                 $"{spec.Engine}   •   {spec.Power}   •   {spec.Drive}\n" +
                 $"Tanque: {spec.TankCapacity}   •   Autonomía estimada: ~{spec.EstimatedRange}\n" +
-                "Tocá la pantalla para cambiar de modelo";
+                GetInteractionHint();
         }
 
         _accent.color = GetBrandColor(brandName);
         _panel.SetActive(true);
+    }
+
+    public void SetShowroomMode(bool enabled)
+    {
+        _showroomMode = enabled;
+        if (_canvas != null)
+            _canvas.sortingOrder = enabled ? 300 : 100;
     }
 
     public void Hide()
@@ -105,9 +114,9 @@ public class CarTechnicalInfoPanel : MonoBehaviour
         GameObject canvasObject = new GameObject("CarTechnicalInfoCanvas", typeof(Canvas), typeof(CanvasScaler));
         canvasObject.transform.SetParent(transform, false);
 
-        Canvas canvas = canvasObject.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 100;
+        _canvas = canvasObject.GetComponent<Canvas>();
+        _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        _canvas.sortingOrder = 100;
 
         CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -194,5 +203,12 @@ public class CarTechnicalInfoPanel : MonoBehaviour
             return new Color(0.05f, 0.34f, 0.72f, 1f);
 
         return new Color(0.15f, 0.55f, 0.92f, 1f);
+    }
+
+    private string GetInteractionHint()
+    {
+        return _showroomMode
+            ? "Arrastrá para girar · Pellizcá para acercar"
+            : "Tocá la pantalla para cambiar de modelo";
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -29,8 +30,14 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     private Dictionary<string, List<GameObject>> _spawnedBrandCars = new Dictionary<string, List<GameObject>>();
     private Dictionary<string, int> _activeCarIndexPerBrand = new Dictionary<string, int>();
     private Dictionary<string, Transform> _brandWorldContainers = new Dictionary<string, Transform>();
+    private HashSet<string> _currentlyTrackedLogos = new HashSet<string>();
     private CarTechnicalInfoPanel _technicalInfoPanel;
+    private CarShowroomController _showroomController;
     private string _displayedBrandName;
+    private string _displayedLogoName;
+    private string _ignoredLogoUntilLost;
+    private bool _showroomActive;
+    private bool _showroomInfoVisible = true;
 
     private void Awake()
     {
@@ -38,6 +45,16 @@ public class MultipleImagesTrackingManager : MonoBehaviour
         _technicalInfoPanel = GetComponent<CarTechnicalInfoPanel>();
         if (_technicalInfoPanel == null)
             _technicalInfoPanel = gameObject.AddComponent<CarTechnicalInfoPanel>();
+
+        _showroomController = GetComponent<CarShowroomController>();
+        if (_showroomController == null)
+            _showroomController = gameObject.AddComponent<CarShowroomController>();
+
+        _showroomController.Initialize(
+            OpenShowroom,
+            SwitchShowroomModel,
+            ClearShowroom,
+            ToggleShowroomInfo);
 
         SetupSceneElements();
     }
@@ -58,11 +75,20 @@ public class MultipleImagesTrackingManager : MonoBehaviour
 
     private void Update()
     {
+        if (_showroomActive)
+            return;
+
         bool switchRequested = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+
+        if (switchRequested && EventSystem.current != null)
+            switchRequested = !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
 
 #if UNITY_EDITOR
         // Permite probar el cambio de modelo con clic izquierdo en XR Simulation.
-        switchRequested |= Input.GetMouseButtonDown(0);
+        bool mouseSwitchRequested = Input.GetMouseButtonDown(0);
+        if (mouseSwitchRequested && EventSystem.current != null)
+            mouseSwitchRequested = !EventSystem.current.IsPointerOverGameObject();
+        switchRequested |= mouseSwitchRequested;
 #endif
 
         if (switchRequested)
@@ -75,6 +101,7 @@ public class MultipleImagesTrackingManager : MonoBehaviour
         _spawnedBrandCars.Clear();
         _activeCarIndexPerBrand.Clear();
         _brandWorldContainers.Clear();
+        _currentlyTrackedLogos.Clear();
 
         foreach (var brand in brandGroups)
         {
@@ -156,6 +183,21 @@ public class MultipleImagesTrackingManager : MonoBehaviour
         
         string logoName = trackedImage.referenceImage.name;
 
+        if (trackedImage.trackingState == TrackingState.Tracking)
+            _currentlyTrackedLogos.Add(logoName);
+        else
+            _currentlyTrackedLogos.Remove(logoName);
+
+        if (trackedImage.trackingState != TrackingState.Tracking && logoName == _ignoredLogoUntilLost)
+        {
+            _ignoredLogoUntilLost = null;
+            if (_currentlyTrackedLogos.Count == 0)
+                _showroomController.ShowScanningPrompt();
+        }
+
+        if (_showroomActive || logoName == _ignoredLogoUntilLost)
+            return;
+
         if (!_logoToBrandMap.TryGetValue(logoName, out BrandGroup brand))
         {
             Debug.LogWarning($"[AR DETECCIÓN] Se escaneó '{logoName}' pero no está registrado en el Inspector.");
@@ -200,12 +242,16 @@ public class MultipleImagesTrackingManager : MonoBehaviour
             }
 
             _displayedBrandName = brand.brandName;
+            _displayedLogoName = logoName;
             RefreshTechnicalInfoPanel(brand.brandName);
+            _showroomController.ShowMarkerPreview();
         }
         else
         {
             SetBrandCarsActive(brand.brandName, false);
             RefreshTechnicalInfoPanel();
+            if (string.IsNullOrEmpty(_displayedBrandName))
+                _showroomController.ShowScanningPrompt();
         }
     }
 
@@ -227,6 +273,7 @@ public class MultipleImagesTrackingManager : MonoBehaviour
             SetBrandCarsActive(brandName, false);
 
         _displayedBrandName = null;
+        _displayedLogoName = null;
         _technicalInfoPanel?.Hide();
     }
 
@@ -278,6 +325,7 @@ public class MultipleImagesTrackingManager : MonoBehaviour
 
         _displayedBrandName = null;
         _technicalInfoPanel.Hide();
+        _showroomController?.ShowScanningPrompt();
     }
 
     private bool TryGetVisibleCar(string brandName, out GameObject visibleCar)
@@ -291,5 +339,85 @@ public class MultipleImagesTrackingManager : MonoBehaviour
 
         visibleCar = brandCars.Find(car => car != null && car.activeSelf);
         return visibleCar != null;
+    }
+
+    private void OpenShowroom()
+    {
+        if (string.IsNullOrEmpty(_displayedBrandName))
+            return;
+
+        BrandGroup brand = FindBrand(_displayedBrandName);
+        if (brand.carPrefabs == null || brand.carPrefabs.Count == 0)
+            return;
+
+        _showroomActive = true;
+        _showroomInfoVisible = true;
+        SetAllCarsActive(false);
+        _technicalInfoPanel.SetShowroomMode(true);
+
+        int index = _activeCarIndexPerBrand[_displayedBrandName];
+        GameObject showroomCar = _showroomController.Open(
+            _displayedBrandName,
+            brand.carPrefabs[index]);
+        _technicalInfoPanel.ShowFor(showroomCar, _displayedBrandName);
+        _showroomController.SetInfoVisible(true);
+    }
+
+    private void SwitchShowroomModel()
+    {
+        if (!_showroomActive || string.IsNullOrEmpty(_displayedBrandName))
+            return;
+
+        BrandGroup brand = FindBrand(_displayedBrandName);
+        if (brand.carPrefabs == null || brand.carPrefabs.Count == 0)
+            return;
+
+        int nextIndex = (_activeCarIndexPerBrand[_displayedBrandName] + 1) % brand.carPrefabs.Count;
+        _activeCarIndexPerBrand[_displayedBrandName] = nextIndex;
+        GameObject showroomCar = _showroomController.DisplayModel(brand.carPrefabs[nextIndex]);
+        if (_showroomInfoVisible)
+            _technicalInfoPanel.ShowFor(showroomCar, _displayedBrandName);
+    }
+
+    private void ClearShowroom()
+    {
+        if (!_showroomActive)
+            return;
+
+        _showroomActive = false;
+        _ignoredLogoUntilLost = _currentlyTrackedLogos.Contains(_displayedLogoName)
+            ? _displayedLogoName
+            : null;
+        _displayedBrandName = null;
+        _displayedLogoName = null;
+        SetAllCarsActive(false);
+        _technicalInfoPanel.SetShowroomMode(false);
+        _technicalInfoPanel.Hide();
+        _showroomController.Close(!string.IsNullOrEmpty(_ignoredLogoUntilLost));
+    }
+
+    private void ToggleShowroomInfo()
+    {
+        if (!_showroomActive)
+            return;
+
+        _showroomInfoVisible = !_showroomInfoVisible;
+        if (_showroomInfoVisible)
+            _technicalInfoPanel.ShowFor(_showroomController.CurrentModel, _displayedBrandName);
+        else
+            _technicalInfoPanel.Hide();
+
+        _showroomController.SetInfoVisible(_showroomInfoVisible);
+    }
+
+    private BrandGroup FindBrand(string brandName)
+    {
+        return brandGroups.Find(brand => brand.brandName == brandName);
+    }
+
+    private void SetAllCarsActive(bool isActive)
+    {
+        foreach (string brandName in _spawnedBrandCars.Keys)
+            SetBrandCarsActive(brandName, isActive);
     }
 }

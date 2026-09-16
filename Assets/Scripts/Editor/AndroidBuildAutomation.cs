@@ -54,6 +54,12 @@ namespace CarShowcase.Editor
 
         private static void ConfigureAndroid()
         {
+            UnityEditor.XR.ARCore.ARCoreSettings arCoreSettings =
+                UnityEditor.XR.ARCore.ARCoreSettings.GetOrCreateSettings();
+            arCoreSettings.requirement = UnityEditor.XR.ARCore.ARCoreSettings.Requirement.Required;
+            arCoreSettings.depth = UnityEditor.XR.ARCore.ARCoreSettings.Requirement.Optional;
+            EditorUtility.SetDirty(arCoreSettings);
+
             PlayerSettings.companyName = "UTN";
             PlayerSettings.productName = "AutoScan AR";
             PlayerSettings.bundleVersion = "1.0.0";
@@ -64,6 +70,7 @@ namespace CarShowcase.Editor
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             EditorUserBuildSettings.buildAppBundle = false;
+            AssetDatabase.SaveAssets();
         }
     }
 }

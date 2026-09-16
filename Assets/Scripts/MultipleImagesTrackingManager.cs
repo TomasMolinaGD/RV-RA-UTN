@@ -29,10 +29,16 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     private Dictionary<string, List<GameObject>> _spawnedBrandCars = new Dictionary<string, List<GameObject>>();
     private Dictionary<string, int> _activeCarIndexPerBrand = new Dictionary<string, int>();
     private Dictionary<string, Transform> _brandWorldContainers = new Dictionary<string, Transform>();
+    private CarTechnicalInfoPanel _technicalInfoPanel;
+    private string _displayedBrandName;
 
     private void Awake()
     {
         _trackedImageManager = GetComponent<ARTrackedImageManager>();
+        _technicalInfoPanel = GetComponent<CarTechnicalInfoPanel>();
+        if (_technicalInfoPanel == null)
+            _technicalInfoPanel = gameObject.AddComponent<CarTechnicalInfoPanel>();
+
         SetupSceneElements();
     }
 
@@ -192,10 +198,14 @@ public class MultipleImagesTrackingManager : MonoBehaviour
             {
                 brandCars[i].SetActive(i == selectedIndex);
             }
+
+            _displayedBrandName = brand.brandName;
+            RefreshTechnicalInfoPanel(brand.brandName);
         }
         else
         {
             SetBrandCarsActive(brand.brandName, false);
+            RefreshTechnicalInfoPanel();
         }
     }
 
@@ -215,6 +225,9 @@ public class MultipleImagesTrackingManager : MonoBehaviour
     {
         foreach (string brandName in _spawnedBrandCars.Keys)
             SetBrandCarsActive(brandName, false);
+
+        _displayedBrandName = null;
+        _technicalInfoPanel?.Hide();
     }
 
     private void SwitchCarModelForActiveBrands()
@@ -237,5 +250,46 @@ public class MultipleImagesTrackingManager : MonoBehaviour
                 brandCars[nextIndex].SetActive(true);
             }
         }
+
+        RefreshTechnicalInfoPanel(_displayedBrandName);
+    }
+
+    private void RefreshTechnicalInfoPanel(string preferredBrandName = null)
+    {
+        if (_technicalInfoPanel == null)
+            return;
+
+        if (TryGetVisibleCar(preferredBrandName, out GameObject preferredCar))
+        {
+            _displayedBrandName = preferredBrandName;
+            _technicalInfoPanel.ShowFor(preferredCar, preferredBrandName);
+            return;
+        }
+
+        foreach (var brandPair in _spawnedBrandCars)
+        {
+            if (TryGetVisibleCar(brandPair.Key, out GameObject visibleCar))
+            {
+                _displayedBrandName = brandPair.Key;
+                _technicalInfoPanel.ShowFor(visibleCar, brandPair.Key);
+                return;
+            }
+        }
+
+        _displayedBrandName = null;
+        _technicalInfoPanel.Hide();
+    }
+
+    private bool TryGetVisibleCar(string brandName, out GameObject visibleCar)
+    {
+        visibleCar = null;
+        if (string.IsNullOrEmpty(brandName))
+            return false;
+
+        if (!_spawnedBrandCars.TryGetValue(brandName, out List<GameObject> brandCars))
+            return false;
+
+        visibleCar = brandCars.Find(car => car != null && car.activeSelf);
+        return visibleCar != null;
     }
 }

@@ -16,7 +16,7 @@ namespace CarShowcase.Editor
         private static readonly string[] MarkerPaths =
         {
             "Assets/Art/Images/VW/VWLogo1.png",
-            "Assets/Art/Images/Ford/LogoF1.png",
+            "Assets/Art/Images/Ford/LogoF3.png",
             "Assets/Art/Images/Audi/LogoAudi1.png"
         };
 

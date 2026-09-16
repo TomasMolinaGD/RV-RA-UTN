@@ -48,26 +48,6 @@ MonoBehaviour:
     m_Name: VWLogo3
     m_Texture: {fileID: 0}
   - m_SerializedGuid:
-      m_GuidLow: 5205225962901979742
-      m_GuidHigh: 1899406808237402499
-    m_SerializedTextureGuid:
-      m_GuidLow: 3919319898685606343
-      m_GuidHigh: 6545485667346347305
-    m_Size: {x: 0.1, y: 0.1}
-    m_SpecifySize: 1
-    m_Name: FLogo1
-    m_Texture: {fileID: 0}
-  - m_SerializedGuid:
-      m_GuidLow: 5013385359608504351
-      m_GuidHigh: 15984385000784650404
-    m_SerializedTextureGuid:
-      m_GuidLow: 11949263227415367970
-      m_GuidHigh: 8288692046279893753
-    m_Size: {x: 0.1, y: 0.1}
-    m_SpecifySize: 1
-    m_Name: FLogo2
-    m_Texture: {fileID: 0}
-  - m_SerializedGuid:
       m_GuidLow: 5131158477778082288
       m_GuidHigh: 11242398567964207787
     m_SerializedTextureGuid:
@@ -86,14 +66,4 @@ MonoBehaviour:
     m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
     m_Name: ALogo1
-    m_Texture: {fileID: 0}
-  - m_SerializedGuid:
-      m_GuidLow: 4727011135416213494
-      m_GuidHigh: 11755315489744724388
-    m_SerializedTextureGuid:
-      m_GuidLow: 3185259908150340067
-      m_GuidHigh: 12080474109983637737
-    m_Size: {x: 0.1, y: 0.1}
-    m_SpecifySize: 1
-    m_Name: ALogo2
     m_Texture: {fileID: 0}

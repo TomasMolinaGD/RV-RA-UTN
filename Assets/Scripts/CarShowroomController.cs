@@ -276,6 +276,8 @@ public class CarShowroomController : MonoBehaviour
         _showroomCamera.fieldOfView = 38f;
         _showroomCamera.nearClipPlane = 0.05f;
         _showroomCamera.farClipPlane = 40f;
+        _showroomCamera.allowHDR = false;
+        _showroomCamera.allowMSAA = false;
 
         EnsureRenderTextureMatchesScreen();
 
@@ -300,7 +302,7 @@ public class CarShowroomController : MonoBehaviour
         _renderScreenHeight = screenHeight;
 
         int longestScreenSide = Mathf.Max(screenWidth, screenHeight);
-        float scale = Mathf.Min(1f, 1280f / longestScreenSide);
+        float scale = Mathf.Min(1f, 1024f / longestScreenSide);
         int width = Mathf.Max(480, Mathf.RoundToInt(screenWidth * scale));
         int height = Mathf.Max(480, Mathf.RoundToInt(screenHeight * scale));
 
@@ -313,12 +315,17 @@ public class CarShowroomController : MonoBehaviour
             Destroy(_renderTexture);
         }
 
-        _renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
+        _renderTexture = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32)
         {
             name = "ShowroomRenderTexture",
-            antiAliasing = 2
+            antiAliasing = 1,
+            useMipMap = false,
+            autoGenerateMips = false
         };
         _renderTexture.Create();
+
+        if (!_renderTexture.IsCreated())
+            Debug.LogError("[SHOWROOM] El dispositivo no pudo crear la textura de render del showroom.");
 
         if (_showroomCamera != null)
             _showroomCamera.targetTexture = _renderTexture;

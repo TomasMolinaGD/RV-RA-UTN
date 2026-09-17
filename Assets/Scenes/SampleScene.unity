@@ -205,15 +205,14 @@ MonoBehaviour:
   - brandName: Volkswagen
     logoNames:
     - VWLogo1
-    - VWLogo2
-    - VWLogo3
     carPrefabs:
     - {fileID: 1688768885721718508, guid: f7072da480aa61a4c947c3c5cb07e68f, type: 3}
     - {fileID: 7906232900803744546, guid: 173734cbd18aef34a9404b4514168ff2, type: 3}
     - {fileID: 7899695697391770184, guid: fa35b4a8e7e2b7e42a0c8b1e3b20bb9e, type: 3}
   - brandName: Ford
     logoNames:
-    - FLogo3
+    - FLogo1
+    - FLogo2
     carPrefabs:
     - {fileID: 4736021190876737314, guid: 3c247b8baab7a1d4c902a4d8922349cd, type: 3}
     - {fileID: 5951226869308161614, guid: 849a4a4517f7c404aa113529eca0add4, type: 3}

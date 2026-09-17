@@ -31,38 +31,28 @@ MonoBehaviour:
       m_GuidLow: 5301454453854818923
       m_GuidHigh: 17951593647075117242
     m_SerializedTextureGuid:
-      m_GuidLow: 13084088926411232159
-      m_GuidHigh: 775785719194057419
+      m_GuidLow: 7369242009899734499
+      m_GuidHigh: 13436889017315525098
     m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
-    m_Name: VWLogo2
+    m_Name: FLogo1
     m_Texture: {fileID: 0}
   - m_SerializedGuid:
       m_GuidLow: 4646969744229267698
       m_GuidHigh: 9247193501526515125
     m_SerializedTextureGuid:
-      m_GuidLow: 12832069122374264186
-      m_GuidHigh: 567044645877354731
+      m_GuidLow: 11949263227415367970
+      m_GuidHigh: 8288692046279893753
     m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
-    m_Name: VWLogo3
+    m_Name: FLogo2
     m_Texture: {fileID: 0}
   - m_SerializedGuid:
       m_GuidLow: 5131158477778082288
       m_GuidHigh: 11242398567964207787
     m_SerializedTextureGuid:
-      m_GuidLow: 7369242009899734499
-      m_GuidHigh: 13436889017315525098
-    m_Size: {x: 0.1, y: 0.1}
-    m_SpecifySize: 1
-    m_Name: FLogo3
-    m_Texture: {fileID: 0}
-  - m_SerializedGuid:
-      m_GuidLow: 5320044784451298632
-      m_GuidHigh: 10122857916293747378
-    m_SerializedTextureGuid:
-      m_GuidLow: 825466602251287886
-      m_GuidHigh: 14811690336177621865
+      m_GuidLow: 3185259908150340067
+      m_GuidHigh: 12080474109983637737
     m_Size: {x: 0.1, y: 0.1}
     m_SpecifySize: 1
     m_Name: ALogo1
